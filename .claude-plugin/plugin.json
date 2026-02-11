@@ -1,0 +1,8 @@
+{
+  "name": "claude-code-plugin",
+  "description": "세션 요약 생성 및 Obsidian 연동 플러그인",
+  "version": "1.0.0",
+  "author": {
+    "name": "guion"
+  }
+}
