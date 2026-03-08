@@ -27,6 +27,7 @@ export OBSIDIAN_VAULT_PATH="$HOME/your-obsidian-vault/claude-sessions"
 `.bashrc`, `.zshrc` 등에 추가하면 매번 설정할 필요가 없다.
 
 **경로 우선순위:**
+
 1. 명령어 인자로 전달한 경로 (`/wrap /path/to/vault`)
 2. `OBSIDIAN_VAULT_PATH` 환경변수
 3. 기본값: `~/obsidian-vault/claude-sessions/`

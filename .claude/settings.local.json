@@ -1,7 +1,17 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "Bash(touch:*)",
+      "Bash(python3 -m json.tool)",
+      "Bash(mkdir:*)",
+      "Bash(python3:*)",
+      "Bash(npx:*)",
+      "Bash(gh api:*)",
+      "Bash(cmux open:*)",
+      "Bash(cmux browser:*)",
+      "WebFetch(domain:claude.com)",
+      "Bash(cp:*)"
     ]
   }
 }

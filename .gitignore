@@ -1,2 +1,13 @@
+# Interview prep runtime files (personal data)
 .claude/skills/interview-prep/resume/
 .claude/skills/interview-prep/tmp/
+.claude/skills/interview-prep/memory/
+skills/interview-prep/memory/
+skills/interview-prep/resume/
+skills/interview-prep/tmp/
+
+# audio-to-text command
+audio-to-text/resources/*
+!audio-to-text/resources/.gitkeep
+audio-to-text/output/*
+!audio-to-text/output/.gitkeep
