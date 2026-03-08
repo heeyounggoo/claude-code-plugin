@@ -1,4 +1,5 @@
 ---
+name: transcribe
 description: 음성 파일을 Markdown 텍스트로 변환. WhisperX 기반 화자 구분 포함.
 allowed-tools:
   - Bash
@@ -20,7 +21,7 @@ argument-hint: "<파일 절대경로 or 파일명> [--timestamps] [--speakers N]
 3. 없으면 `~/Downloads/`의 오디오 파일 목록을 보여주고 선택 요청
 
 ```bash
-python ~/.claude/plugins/claude-code-plugin/audio-to-text/scripts/transcribe.py \
+python ${CLAUDE_PLUGIN_ROOT}/audio-to-text/scripts/transcribe.py \
   <파일 경로> \
   [--timestamps] \
   [--speakers N]

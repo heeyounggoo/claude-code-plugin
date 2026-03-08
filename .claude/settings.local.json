@@ -11,7 +11,14 @@
       "Bash(cmux open:*)",
       "Bash(cmux browser:*)",
       "WebFetch(domain:claude.com)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(cmux:*)",
+      "Bash(tmux source-file:*)",
+      "Bash(grep:*)"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "youtube-transcript"
+  ]
 }

@@ -1,6 +1,16 @@
 ---
 name: interview-prep
-description: 7년차 Frontend Developer 구희영의 이직 면접 대비 스킬. 이력서 기반으로 예상 질문 검증, 답변 분석/개선, 꼬리 질문 준비를 체계적으로 지원합니다. "면접 준비", "면접 대비", "이직 준비", "면접 연습", "예상 질문 검토", "답변 검토해줘", "면접 봐줘", "인터뷰 준비" 등의 요청 시 반드시 이 스킬을 사용하세요. Do NOT use for general coding help, code review, debugging, or non-interview topics.
+description: |
+  7년차 Frontend Developer 구희영의 이직 면접 대비 스킬. 이력서 기반으로 예상 질문 검증, 답변 분석/개선, 꼬리 질문 준비를 체계적으로 지원합니다.
+  "면접 준비", "면접 대비", "이직 준비", "면접 연습", "예상 질문 검토", "답변 검토해줘", "면접 봐줘", "인터뷰 준비", "답변 피드백" 등의 요청이 오면 반드시 이 스킬을 활성화하세요. 면접이나 이직과 조금이라도 관련된 맥락이면 적극적으로 사용하세요.
+  Do NOT use for general coding help, code review, debugging, or non-interview topics.
+allowed-tools:
+  - Read
+  - Write
+  - Glob
+  - Bash
+  - AskUserQuestion
+  - WebFetch
 ---
 
 # Interview Prep

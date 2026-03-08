@@ -1,4 +1,5 @@
 ---
+name: wrap
 description: 세션 마무리 및 Obsidian 저장
 allowed-tools:
   - Bash

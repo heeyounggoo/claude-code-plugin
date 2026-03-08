@@ -1,5 +1,6 @@
 ---
-description: YouTube 영상 내용을 정리하여 Obsidian에 저장
+name: youtube
+description: YouTube 영상을 구조화된 한국어 노트로 정리하여 Obsidian에 저장. YouTube URL이 포함된 요청이거나 "유튜브 정리", "영상 노트", "영상 요약" 등의 맥락이면 이 스킬을 사용하세요.
 allowed-tools:
   - Bash
   - Read
