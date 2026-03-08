@@ -1,0 +1,5 @@
+{
+  "name": "scrape",
+  "description": "범용 아티클 스크래퍼: 단건/목록 URL → 번역/요약 → Obsidian 저장",
+  "version": "1.0.0"
+}
