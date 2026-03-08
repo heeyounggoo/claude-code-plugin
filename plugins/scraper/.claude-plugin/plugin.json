@@ -1,0 +1,8 @@
+{
+  "name": "scraper",
+  "version": "1.0.0",
+  "description": "YouTube, 웹 아티클, 로컬 파일을 분석하여 Obsidian에 구조화된 한국어 노트로 저장",
+  "author": {
+    "name": "guion"
+  }
+}

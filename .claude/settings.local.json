@@ -14,7 +14,13 @@
       "Bash(cp:*)",
       "Bash(cmux:*)",
       "Bash(tmux source-file:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(claude plugin:*)",
+      "Read(//Users/gooheeyoung/.claude/plugins/**)",
+      "Read(//Users/gooheeyoung/.claude/**)",
+      "Bash(rm:*)",
+      "Bash(ln:*)",
+      "Skill(plugin-dev:create-plugin)"
     ]
   },
   "enableAllProjectMcpServers": true,

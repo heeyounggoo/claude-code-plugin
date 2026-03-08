@@ -1,6 +1,6 @@
 {
   "name": "claude-code-plugin",
-  "description": "개인 생산성 플러그인: 세션 요약(/wrap), YouTube 노트(/youtube), 음성 변환(/transcribe), 면접 대비(interview-prep)",
+  "description": "개인 생산성 플러그인: 세션 요약(/wrap), 음성 변환(/transcribe), 면접 대비(interview-prep)",
   "version": "1.1.0",
   "author": {
     "name": "guion"
