@@ -20,7 +20,11 @@
       "Read(//Users/gooheeyoung/.claude/**)",
       "Bash(rm:*)",
       "Bash(ln:*)",
-      "Skill(plugin-dev:create-plugin)"
+      "Skill(plugin-dev:create-plugin)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(claude-personal:*)",
+      "Bash(git:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

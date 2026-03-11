@@ -1,0 +1,17 @@
+{
+  "notion": {
+    "token": "secret_your_notion_integration_token",
+    "database_id": "312163b1524a801686b9f6d25d425bcc"
+  },
+  "user": {
+    "notion_user_id": "your_notion_user_id"
+  },
+  "filter": {
+    "개발 상태": "시작 전",
+    "대분류": "상품관리"
+  },
+  "on_complete": {
+    "개발 상태": "작업 완료"
+  },
+  "max_items": 10
+}
