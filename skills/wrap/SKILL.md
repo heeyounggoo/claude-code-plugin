@@ -1,6 +1,6 @@
 ---
 name: wrap
-description: 세션 마무리 및 Obsidian 저장
+description: Session wrap-up and Obsidian save. Two modes: (1) Add mode — triggered by "add to obsidian", "obsidian save", "옵시디언에 추가", "옵시디언 정리", "obsidian 저장" etc. when saving specific content to Obsidian; (2) Session summary mode — triggered by "/wrap", "세션 정리", "세션 마무리", "wrap up session" etc. Works for all session types: coding, learning, planning, discussion.
 allowed-tools:
   - Bash
   - Read
@@ -8,124 +8,132 @@ allowed-tools:
   - Edit
   - Glob
   - AskUserQuestion
-argument-hint: "[obsidian-vault-path]"
+argument-hint: "[content or obsidian-vault-path]"
 ---
 
-# /wrap — 세션 요약 & Obsidian 저장
+# /wrap — Obsidian Save & Session Summary
 
-이 세션의 대화 내용을 분석하여 구조화된 한국어 마크다운 요약을 생성하고 Obsidian 볼트에 저장하라.
+## Step 0: Determine Mode
 
-## 1단계: Obsidian 저장 경로 결정
+```
+$ARGUMENTS present → Mode A: Add content
+$ARGUMENTS absent  → Mode B: Session summary
+```
 
-우선순위에 따라 저장 경로를 결정한다:
-1. `$ARGUMENTS` 값이 있으면 그 경로를 사용
-2. 없으면 `$OBSIDIAN_VAULT_PATH` 환경변수 값을 사용
-3. 둘 다 없으면 `~/obsidian-vault/claude-sessions/` 를 기본값으로 사용
+## Step 1: Resolve Obsidian Vault Path
 
-경로가 결정되면 Bash로 `mkdir -p <경로>` 를 실행하여 디렉토리가 존재하도록 보장한다.
+Priority order:
 
-## 2단계: 세션 정보 수집
+1. If `$ARGUMENTS` looks like a file path, use it
+2. Read `config.json` in the skill directory — parse `obsidian_vault_path`
+   - Use the Read tool to load the file, then parse JSON
+3. Fall back to `$OBSIDIAN_VAULT_PATH` environment variable
+4. Default: `~/obsidian-vault/claude-sessions/`
 
-Bash로 다음 명령들을 실행하여 코드 변경사항을 수집한다:
-- `date "+%y%m%d %H:%M"` — 현재 시간
-- `git diff --stat` — 변경 통계 (git 저장소인 경우만)
-- `git log --oneline -20` — 최근 커밋 (git 저장소인 경우만)
-- `git diff --name-only` — 변경된 파일 목록 (git 저장소인 경우만)
+Copy `config.example.json` → `config.json` to configure the vault path.
 
-git 명령이 실패하면 (git 저장소가 아닌 경우) 무시하고 진행한다.
+Once resolved, run `mkdir -p <path>` via Bash to ensure the directory exists.
 
-## 3단계: 대화 분석 → 요약 생성
+## Step 2: Collect Basic Info
 
-이 세션의 **전체 대화 내용**을 처음부터 끝까지 분석하여 아래 템플릿에 맞는 한국어 요약을 작성한다. 반드시 실제 대화 내용을 기반으로 구체적으로 작성한다.
+Run via Bash:
 
-### 요약 템플릿
+- `date "+%y%m%d %H:%M"` — current timestamp
+- Mode B only: `git diff --stat`, `git log --oneline -20`, `git diff --name-only` (skip silently if not a git repo)
+
+## Step 3: Write Content
+
+### Common Wrapper Format
+
+All saved content uses this wrapper:
 
 ```markdown
-## 세션: {주제를 간결하게 요약}
+## {title}
 
-| 항목 | 내용 |
-|------|------|
-| 날짜 | {YYMMDD HH:MM} - {YYMMDD HH:MM} |
-| 프로젝트 | {프로젝트명 또는 작업 디렉토리} |
-| 태그 | {#태그1 #태그2 #태그3} |
+| Field | Value |
+|-------|-------|
+| Date | {YYMMDD HH:MM} |
+| Project / Topic | {context} |
+| Tags | {#tag1 #tag2} |
 
-### 목표와 결과
-
-**목표:** {세션에서 달성하려 한 것}
-
-**결과:**
-- ✅ {완료된 항목 1}
-- ✅ {완료된 항목 2}
-
-**미완료:** (없으면 이 섹션 전체를 생략)
-- ⬜ {미완료 항목}
-
-### 핵심 의사결정
-
-| 결정 | 이유 | 기각된 대안 |
-|------|------|-------------|
-| {결정 1} | {이유} | {대안} |
-
-### 코드 변경 요약
-
-| 파일 | 변경 내용 |
-|------|-----------|
-| {파일경로} | {변경 내용 요약} |
-
-### 회고
-
-- **배운 것:** {이 세션에서 배운 핵심 내용}
-- **개선 필요:** {다음에 더 잘할 수 있는 점}
-- **다음에 적용:** {다음 세션에 적용할 액션}
+{mode-specific content}
 ```
 
-**작성 규칙:**
-- 모든 내용은 **한국어**로 작성
-- 태그는 `#` 접두사 형식 (예: `#리팩토링 #버그수정`)
-- 날짜 형식: `YYMMDD HH:MM` (예: `260211 14:30`)
-- 시작 시간을 모르면 종료 시간만 기재
-- 의사결정이나 코드 변경이 없으면 해당 섹션을 `없음`으로 표시하지 말고 섹션 자체를 생략
-- 구체적이고 실용적으로 작성 — 뻔한 내용은 생략
+---
 
-## 4단계: 요약 미리보기 및 사용자 확인
+### Mode A: Add Content
 
-생성한 요약 내용을 사용자에게 그대로 보여준 뒤, AskUserQuestion 도구로 저장 여부를 확인한다.
+Write the content from `$ARGUMENTS` as a proper memo or document — not a raw dump, but structured and readable.
 
-- "이대로 저장" 선택 시 → 5단계로 진행
-- "수정 요청" 선택 시 → 사용자의 피드백을 반영하여 요약을 수정한 뒤 다시 4단계를 반복
-- "저장 취소" 선택 시 → 저장하지 않고 6단계(compress)로 바로 이동
+- **Title**: extract the core topic from the arguments
+- **Tags**: auto-generate based on content
+- **Body**: format as a memo/note using lists, tables, or headers as appropriate. Write in Korean.
 
-## 5단계: Obsidian에 저장
+---
 
-파일명은 `YYMMDD.md` 형식이다 (예: `260211.md`).
+### Mode B: Session Summary
 
-1. Glob으로 해당 파일이 이미 존재하는지 확인
-2. **파일이 존재하면:**
-   a. Read로 기존 내용을 읽는다.
-   b. 기존 파일에서 `## 세션:` 으로 시작하는 모든 섹션의 제목과 태그를 파싱한다.
-   c. 현재 요약의 주제/태그와 기존 섹션들을 비교하여 **동일하거나 연속된 주제**인 섹션이 있는지 판단한다.
-      - 판단 기준: 프로젝트명이 같고, 태그가 상당 부분 겹치며, 세션 주제가 동일 작업의 연속인 경우
-   d. **이어지는 주제가 있으면:** 해당 섹션을 찾아 내용을 **병합 갱신**한다.
-      - 기존 섹션의 날짜 범위를 확장한다 (시작시간 유지, 종료시간을 현재로 갱신)
-      - 결과 항목에 새로운 완료/미완료 항목을 추가한다
-      - 핵심 의사결정, 코드 변경 요약 테이블에 새 행을 추가한다
-      - 회고는 최신 내용으로 교체한다
-      - Edit 도구를 사용하여 해당 섹션만 수정한다
-   e. **이어지는 주제가 없으면:** 기존 내용 끝에 `\n\n---\n\n` 구분선과 함께 새 요약을 append하여 Write로 저장
-3. **파일이 없으면:** 새 파일로 Write하여 생성
+Analyze the **full conversation** from start to finish and write a Korean summary using the structure below:
 
-## 6단계: 종료 메시지 및 compact
+```markdown
+### 세션 흐름
 
-저장이 완료되면 (또는 4단계에서 저장 취소된 경우에도) 아래와 같은 형식으로 메시지를 출력한다:
+{Narrative of what happened in the session, in chronological order. Include the flow of conversation, exploration, key decision moments, and any blockers. 3–7 sentences.}
+
+### 계획 (only if plan mode was used)
+
+{Core of any plan established — what, why, and in what order. 3–5 lines.}
+
+### 주요 내용
+
+{Auto-selected based on session type — include only what applies:}
+- Coding / dev: what was implemented, changed, or fixed
+- Learning / analysis: key concepts, insights, knowledge organized
+- Planning / discussion: decisions made, open questions
+
+### 이어서 할 것 (omit section if nothing)
+
+- {items to continue in the next session}
+```
+
+**Writing rules:**
+- All content in **Korean**
+- Tags use `#` prefix (e.g. `#리팩토링 #버그수정`)
+- Date format: `YYMMDD HH:MM` (e.g. `260211 14:30`)
+- Omit sections entirely when empty — never write "없음"
+- Include `### 계획` section if plan mode is detected: signs of planning in the conversation, or a related plan file exists under `~/.claude-personal/plans/`
+
+## Step 4: Preview & Confirm
+
+Show the generated content to the user, then ask for confirmation via AskUserQuestion.
+
+- **Save as-is** → proceed to Step 5
+- **Request edits** → revise based on feedback, then repeat Step 4
+- **Cancel** → skip to Step 6 without saving
+
+## Step 5: Save to Obsidian
+
+Filename format: `YYMMDD.md` (e.g. `260211.md`).
+
+1. Use Glob to check if the file already exists
+2. **File exists:**
+   - Read existing content
+   - **Mode B:** Parse existing `## ` sections for title and tags. If the current summary is a continuation of an existing section (same project, overlapping tags, same topic thread), **merge**: expand date range, update 세션 흐름 / 주요 내용 / 이어서 할 것, use Edit tool. Otherwise, append with `\n\n---\n\n` separator and Write.
+   - **Mode A:** Always append with `\n\n---\n\n` separator
+3. **File does not exist:** Write as a new file
+
+## Step 6: Done
+
+Output a completion message in this format:
 
 ```
-📋 세션 요약이 저장되었습니다
-   경로: {저장된 파일의 전체 경로}
-   주제: {세션 주제 한 줄 요약}
-   저장 방식: {새로 추가 | 기존 세션에 병합}
+📋 저장 완료
+   경로: {full file path}
+   제목: {one-line title of saved content}
+   저장 방식: {새로 추가 | 기존 세션에 병합 | 추가(append)}
 
 세션이 마무리되었습니다. 수고하셨습니다!
 💡 컨텍스트 압축을 위해 `/compact` 명령을 실행해주세요.
 ```
 
-**참고:** `/compact`는 Claude Code 내장 명령이므로 스킬 내에서 자동 실행할 수 없다. 반드시 사용자에게 직접 실행하도록 안내한다.
+Note: `/compact` is a built-in Claude Code command and cannot be triggered from within a skill. Always prompt the user to run it manually.

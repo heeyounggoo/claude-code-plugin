@@ -18,3 +18,4 @@ audio-to-text/output/*
 
 .claude/settings.local.json
 skills/qa-processor/config.json
+skills/wrap/config.json
